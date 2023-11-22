@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class InputTextPage extends StatelessWidget {
-  const InputTextPage({Key? key}) : super(key: key);
+  const InputTextPage({super.key});
 
   static const nameRoute = "/input-text";
 

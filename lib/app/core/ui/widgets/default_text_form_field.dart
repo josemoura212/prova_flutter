@@ -8,7 +8,7 @@ class DefaultTextFormField extends StatelessWidget {
   final TextInputAction? textInputAction;
   final Function(PointerDownEvent)? onTapOutSide;
   const DefaultTextFormField({
-    Key? key,
+    super.key,
     required String label,
     required TextEditingController controller,
     required this.icon,
@@ -16,8 +16,7 @@ class DefaultTextFormField extends StatelessWidget {
     this.textInputAction,
     this.onTapOutSide,
   })  : _label = label,
-        _controller = controller,
-        super(key: key);
+        _controller = controller;
 
   @override
   Widget build(BuildContext context) {

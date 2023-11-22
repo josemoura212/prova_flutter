@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:prova_flutter/app/core/ui/widgets/default_text_form_field.dart';
 import 'package:prova_flutter/app/modules/input_text/input_text_page.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -7,7 +8,7 @@ part 'widgets/privacy_policy.dart';
 part 'widgets/login_form.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  const LoginPage({super.key});
 
   static const nameRoute = "/login";
 
