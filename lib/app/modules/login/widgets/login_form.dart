@@ -62,12 +62,14 @@ class _LoginFormState extends State<_LoginForm> {
               final formValid = _formKey.currentState?.validate() ?? false;
 
               if (formValid) {
-                final url = Uri.parse(
-                    "https://655e900d879575426b43a345.mockapi.io/api/users");
-                post(url, body: {
-                  "login": _loginEC.text,
-                  "password": _passwordEC.text,
-                });
+                final url = Uri.parse(Constantes.url);
+                post(
+                  url,
+                  body: {
+                    "login": _loginEC.text,
+                    "password": _passwordEC.text,
+                  },
+                );
                 Navigator.pushNamedAndRemoveUntil(
                     context, InputTextPage.nameRoute, (route) => false);
               }
