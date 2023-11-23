@@ -17,6 +17,7 @@ class MainApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: const LoginPage(),
       title: UiConfig.tittle,
+      theme: UiConfig.theme,
       initialRoute: "/login",
       routes: {
         LoginPage.nameRoute: (context) => const LoginPage(),

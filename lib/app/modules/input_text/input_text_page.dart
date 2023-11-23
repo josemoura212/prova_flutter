@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:prova_flutter/app/core/ui/widgets/default_text_form_field.dart';
 import 'package:prova_flutter/app/core/ui/widgets/privacy_policy.dart';
 import 'package:prova_flutter/app/modules/input_text/input_text_controller.dart';
 import 'package:validatorless/validatorless.dart';
 import "package:flutter_mobx/flutter_mobx.dart";
+part 'widgets/input_text_item.dart';
 
 class InputTextPage extends StatefulWidget {
   const InputTextPage({super.key});
@@ -33,6 +35,7 @@ class _InputTextPageState extends State<InputTextPage> {
     super.dispose();
   }
 
+  int? editingIndex;
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -49,10 +52,7 @@ class _InputTextPageState extends State<InputTextPage> {
               child: DecoratedBox(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [
-                      Colors.blue.shade700,
-                      Colors.teal,
-                    ],
+                    colors: [Colors.blue.shade700, Colors.teal],
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                   ),
@@ -69,49 +69,43 @@ class _InputTextPageState extends State<InputTextPage> {
                           child: SizedBox(
                             height: size.height * .5,
                             child: Padding(
-                              padding: const EdgeInsets.all(10.0),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 12.0),
                               child: Column(
                                 children: [
-                                  TextFormField(),
-                                  Observer(builder: (_) {
-                                    return ListView.builder(
-                                      shrinkWrap: true,
-                                      itemCount: contoller.inputText.length,
-                                      itemBuilder: (context, index) {
-                                        return Text(contoller.inputText[index]);
-                                      },
-                                    );
-                                  })
+                                  Observer(
+                                    builder: (_) {
+                                      return ListView.builder(
+                                        shrinkWrap: true,
+                                        itemCount: contoller.inputText.length,
+                                        itemBuilder: (context, index) {
+                                          final text =
+                                              contoller.inputText[index];
+                                          // return Text(contoller.inputText[index]);
+                                          return InputTextItem(
+                                              label: text,
+                                              editInuptText: () =>
+                                                  _editInuptText(index),
+                                              deleteInuptText: () =>
+                                                  _deleteInuptText(index));
+                                        },
+                                      );
+                                    },
+                                  )
                                 ],
                               ),
                             ),
                           ),
                         ),
                         const SizedBox(height: 30),
-                        TextFormField(
+                        DefaultTextFormField(
                           focusNode: textFN,
                           controller: _textEC,
                           onFieldSubmitted: _onSubmit,
+                          labelText: "Digite seu texto",
+                          floatingLabelBehavior: FloatingLabelBehavior.never,
                           validator:
                               Validatorless.required("Campo obrigatório"),
-                          decoration: InputDecoration(
-                            label: const Text("Digite seu texto"),
-                            filled: true,
-                            fillColor: Colors.white,
-                            floatingLabelBehavior: FloatingLabelBehavior.never,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              borderSide: const BorderSide(color: Colors.white),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              borderSide: const BorderSide(color: Colors.white),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              borderSide: const BorderSide(color: Colors.white),
-                            ),
-                          ),
                         ),
                         const SizedBox(height: 50),
                         const PrivacyPolicy(),
@@ -127,13 +121,51 @@ class _InputTextPageState extends State<InputTextPage> {
     );
   }
 
-  void _onSubmit(String value) {
+  void _onSubmit(
+    String text,
+  ) {
     final formValid = _formKey.currentState?.validate() ?? false;
     if (formValid) {
-      contoller.saveInputText(value);
+      contoller.saveInputText(text, editingIndex);
       _textEC.clear();
     } else {
       textFN.requestFocus();
+    }
+    editingIndex = null;
+  }
+
+  void _editInuptText(int index) {
+    editingIndex = index;
+    textFN.requestFocus();
+    _textEC.text = contoller.inputText[index];
+  }
+
+  void _deleteInuptText(int index) async {
+    final confirm = await showDialog(
+      context: context,
+      builder: (contextDialog) {
+        return AlertDialog(
+          title: const Text("Deseja deletar?"),
+          content: const Text("Realmente deseja deletar o texto?"),
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context, true);
+              },
+              child: const Text("Confirmar"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context, false);
+              },
+              child: const Text("Cancelar!"),
+            ),
+          ],
+        );
+      },
+    );
+    if (confirm) {
+      contoller.deleteInputText(index);
     }
   }
 }

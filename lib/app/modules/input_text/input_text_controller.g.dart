@@ -12,16 +12,16 @@ mixin _$InputTextController on InputTextControllerBase, Store {
   late final _$_inputTextAtom =
       Atom(name: 'InputTextControllerBase._inputText', context: context);
 
-  List<String> get inputText {
+  ObservableList<String> get inputText {
     _$_inputTextAtom.reportRead();
     return super._inputText;
   }
 
   @override
-  List<String> get _inputText => inputText;
+  ObservableList<String> get _inputText => inputText;
 
   @override
-  set _inputText(List<String> value) {
+  set _inputText(ObservableList<String> value) {
     _$_inputTextAtom.reportWrite(value, super._inputText, () {
       super._inputText = value;
     });
@@ -31,8 +31,9 @@ mixin _$InputTextController on InputTextControllerBase, Store {
       AsyncAction('InputTextControllerBase.saveInputText', context: context);
 
   @override
-  Future<void> saveInputText(String text) {
-    return _$saveInputTextAsyncAction.run(() => super.saveInputText(text));
+  Future<void> saveInputText(String text, int? index) {
+    return _$saveInputTextAsyncAction
+        .run(() => super.saveInputText(text, index));
   }
 
   late final _$getInputTextAsyncAction =

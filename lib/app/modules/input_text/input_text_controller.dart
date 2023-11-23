@@ -9,20 +9,25 @@ abstract class InputTextControllerBase with Store {
   final localStorage = SharedPreferencesLocalStorageImpl();
   @readonly
   // ignore: prefer_final_fields
-  var _inputText = <String>[];
+  var _inputText = <String>[].asObservable();
 
   @action
-  Future<void> saveInputText(String text) async {
-    _inputText.add(text);
-    await localStorage.write<List<String>>(
-        Constantes.localStorageKey, _inputText);
+  Future<void> saveInputText(String text, int? index) async {
+    if (index != null) {
+      editInputText(text, index);
+    } else {
+      _inputText.add(text);
+      await localStorage.write<List<String>>(
+          Constantes.localStorageKey, _inputText);
+    }
   }
 
   @action
   Future<void> getInputText() async {
     _inputText.clear();
-    _inputText =
+    final list =
         await localStorage.read<List<String>>(Constantes.localStorageKey) ?? [];
+    _inputText.addAll(list);
   }
 
   @action
@@ -30,6 +35,7 @@ abstract class InputTextControllerBase with Store {
     _inputText.removeAt(index);
     await localStorage.write<List<String>>(
         Constantes.localStorageKey, _inputText);
+    getInputText();
   }
 
   @action
@@ -37,5 +43,6 @@ abstract class InputTextControllerBase with Store {
     _inputText[index] = text;
     await localStorage.write<List<String>>(
         Constantes.localStorageKey, _inputText);
+    getInputText();
   }
 }
