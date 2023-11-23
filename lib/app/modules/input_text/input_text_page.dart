@@ -73,24 +73,25 @@ class _InputTextPageState extends State<InputTextPage> {
                                   const EdgeInsets.symmetric(horizontal: 12.0),
                               child: Column(
                                 children: [
-                                  Observer(
-                                    builder: (_) {
-                                      return ListView.builder(
-                                        shrinkWrap: true,
-                                        itemCount: contoller.inputText.length,
-                                        itemBuilder: (context, index) {
-                                          final text =
-                                              contoller.inputText[index];
-                                          // return Text(contoller.inputText[index]);
-                                          return InputTextItem(
-                                              label: text,
-                                              editInuptText: () =>
-                                                  _editInuptText(index),
-                                              deleteInuptText: () =>
-                                                  _deleteInuptText(index));
-                                        },
-                                      );
-                                    },
+                                  Expanded(
+                                    child: Observer(
+                                      builder: (_) {
+                                        return ListView.builder(
+                                          itemCount: contoller.inputText.length,
+                                          itemBuilder: (context, index) {
+                                            final text =
+                                                contoller.inputText[index];
+                                            // return Text(contoller.inputText[index]);
+                                            return InputTextItem(
+                                                label: text,
+                                                editInuptText: () =>
+                                                    _editInuptText(index),
+                                                deleteInuptText: () =>
+                                                    _deleteInuptText(index));
+                                          },
+                                        );
+                                      },
+                                    ),
                                   )
                                 ],
                               ),
@@ -128,9 +129,8 @@ class _InputTextPageState extends State<InputTextPage> {
     if (formValid) {
       contoller.saveInputText(text, editingIndex);
       _textEC.clear();
-    } else {
-      textFN.requestFocus();
     }
+    textFN.requestFocus();
     editingIndex = null;
   }
 

@@ -31,6 +31,7 @@ class _LoginFormState extends State<_LoginForm> {
             label: "Usuário",
             controller: _loginEC,
             icon: Icons.person,
+            textInputAction: TextInputAction.next,
             validator: Validatorless.multiple([
               Validatorless.min(2, "Minimo de 2 caracteres"),
               Validatorless.max(20, "Maximo de 20 caracteres"),
@@ -44,6 +45,8 @@ class _LoginFormState extends State<_LoginForm> {
             label: "Senha",
             controller: _passwordEC,
             icon: Icons.lock,
+            textInputAction: TextInputAction.go,
+            onFieldSubmitted: (_) => _onSubmit(),
             validator: Validatorless.multiple([
               Validatorless.min(2, "Minimo de 2 caracteres"),
               Validatorless.max(20, "Maximo de 20 caracteres"),
@@ -58,22 +61,7 @@ class _LoginFormState extends State<_LoginForm> {
               minimumSize: Size(size.width * .6, 60),
               backgroundColor: Colors.greenAccent.shade400,
             ),
-            onPressed: () {
-              final formValid = _formKey.currentState?.validate() ?? false;
-
-              if (formValid) {
-                final url = Uri.parse(Constantes.url);
-                post(
-                  url,
-                  body: {
-                    "login": _loginEC.text,
-                    "password": _passwordEC.text,
-                  },
-                );
-                Navigator.pushNamedAndRemoveUntil(
-                    context, InputTextPage.nameRoute, (route) => false);
-              }
-            },
+            onPressed: _onSubmit,
             child: const Text(
               "Entrar",
               style: TextStyle(
@@ -85,5 +73,21 @@ class _LoginFormState extends State<_LoginForm> {
         ],
       ),
     );
+  }
+
+  void _onSubmit() {
+    final formValid = _formKey.currentState?.validate() ?? false;
+    if (formValid) {
+      final url = Uri.parse(Constantes.url);
+      post(
+        url,
+        body: {
+          "login": _loginEC.text,
+          "password": _passwordEC.text,
+        },
+      );
+      Navigator.pushNamedAndRemoveUntil(
+          context, InputTextPage.nameRoute, (route) => false);
+    }
   }
 }
