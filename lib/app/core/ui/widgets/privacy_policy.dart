@@ -1,7 +1,8 @@
-part of '../login_page.dart';
+import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class _PrivacyPolicy extends StatelessWidget {
-  const _PrivacyPolicy();
+class PrivacyPolicy extends StatelessWidget {
+  const PrivacyPolicy({super.key});
 
   @override
   Widget build(BuildContext context) {

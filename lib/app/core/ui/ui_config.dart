@@ -5,5 +5,8 @@ class UiConfig {
 
   static String get tittle => "Prova Flutter";
 
-  static ThemeData get theme => ThemeData();
+  static ThemeData get theme => ThemeData(
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal),
+      );
 }

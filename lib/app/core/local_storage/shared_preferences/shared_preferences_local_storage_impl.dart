@@ -19,7 +19,22 @@ class SharedPreferencesLocalStorageImpl implements LocalStorage {
   @override
   Future<V?> read<V>(String key) async {
     final sharedPreferences = await _instance;
-    return sharedPreferences.get(key) as V?;
+    // return sharedPreferences.get(key) as V?;
+
+    switch (V) {
+      case const (String):
+        return sharedPreferences.getString(key) as V?;
+      case const (int):
+        return sharedPreferences.getInt(key) as V?;
+      case const (double):
+        return sharedPreferences.getDouble(key) as V?;
+      case const (bool):
+        return sharedPreferences.getBool(key) as V?;
+      case const (List<String>):
+        return sharedPreferences.getStringList(key) as V?;
+      default:
+        throw Exception("Type not suported");
+    }
   }
 
   @override
